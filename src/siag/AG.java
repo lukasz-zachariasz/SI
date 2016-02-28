@@ -151,7 +151,7 @@ public class AG {
         int temp[] = new int[schema.getNodesNumber()];
         for (int i = 0; i < getPopulationNumber(); i++) {
             for (int j = 0; j < schema.getNodesNumber(); j++) {
-                temp[j] = random.nextInt(25);
+                temp[j] = random.nextInt(schema.getNodesNumber());
             }
             population.add(new Subject(temp));
         }
@@ -175,7 +175,7 @@ public class AG {
                 colors.add(op.get(i).getColor());
             }
         }
-        one.setRating(rate * colors.size());
+        one.setRating((1+rate) * colors.size());
         return one.getRating();
     }
 
@@ -206,6 +206,7 @@ public class AG {
                 result -= getPopulation().get(j).getChance();
                 if (result <= 0.0) {
                     parentTwo = getPopulation().get(j);
+                    if(parentTwo==parentOne) getPopulation().get(j+1);
                     if (getRandom().nextInt(100) < this.getChanceCrossing()) {
                         point = getRandom().nextInt(getSchema().getNodesNumber());
 
