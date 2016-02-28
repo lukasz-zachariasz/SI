@@ -195,7 +195,7 @@ public class AG {
         sort(getPopulation());
         getPopulation().subList(getPopulation().size() / 2, getPopulation().size()).clear(); //population.size should be equal to population number
         for (int i = 0; i < getPopulation().size(); i++) {
-            evaluate(getPopulation().get(i));
+            evaluate(getPopulation().get(i));   
             ratingsSummary += getPopulation().get(i).getRating();
         }
         double range = 1.0 / ratingsSummary;
@@ -233,6 +233,18 @@ public class AG {
             }
         }
         population = newPopulation;
+    }
+
+    public void mutate() {
+        for (int i = 0; i < this.getPopulationNumber(); i++) {
+            for (int j = 0; j < schema.getNodesNumber(); j++) {
+                if (random.nextInt(10000)<this.chanceMutation) {
+                            int[] temp = population.get(i).getColors();
+                            temp[j]=random.nextInt(schema.getNodesNumber());
+                            population.get(i).setColors(temp);
+                }
+            }
+        }
     }
 
 }

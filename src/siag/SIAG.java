@@ -22,16 +22,17 @@ public class SIAG {
         Subject bestOne;
         Graph test = new Graph(new File("test.col"));
         System.out.println(test.getNodesNumber());
-        AG algorytm = new AG(5000,90, 0, test);
+        AG algorytm = new AG(2000,90, 100, test);
         algorytm.populate();
         bestOne = algorytm.getPopulation().get(0);
-        for (int k=0;k<20;k++){
+        for (int k=0;k<2000;k++){
             for (int i = 0; i < algorytm.getPopulationNumber(); i++) {
                 if (algorytm.evaluate(algorytm.getPopulation().get(i)) < bestOne.getRating()) {
                     bestOne = algorytm.getPopulation().get(i);
                 }
             }
             algorytm.crossing();
+            algorytm.mutate();
             System.out.println(bestOne.getRating());
             
         }
