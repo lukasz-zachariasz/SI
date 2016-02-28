@@ -15,7 +15,11 @@ public class Subject implements Comparable {
     private double chance;
     
     Subject(int[] colors){
-        this.colors=colors;
+        //this.colors=colors;
+        this.colors=new int[colors.length];
+        for(int i =0;i<colors.length;i++){
+            this.colors[i]=colors[i];
+        }
     }
     
     public int getRating(){

@@ -30,6 +30,12 @@ public class Node {
         relations=n.getRelations();
         this.name = n.getName();
     }
+        Node(Node n, int color){
+        this.color=color;
+        rating=n.getRating();
+        relations=n.getRelations();
+        this.name = n.getName();
+    }
 
     public int getColor() {
         return color;

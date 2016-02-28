@@ -148,12 +148,12 @@ public class AG {
     }
 
     public void populate() {
-        int temp[] = new int[getSchema().getNodesNumber()];
+        int temp[] = new int[schema.getNodesNumber()];
         for (int i = 0; i < getPopulationNumber(); i++) {
-            for (int j = 0; j < getSchema().getNodesNumber(); j++) {
-                temp[j] = getRandom().nextInt(getSchema().getNodesNumber());
+            for (int j = 0; j < schema.getNodesNumber(); j++) {
+                temp[j] = random.nextInt(25);
             }
-            getPopulation().add(new Subject(temp));
+            population.add(new Subject(temp));
         }
     }
 
@@ -164,7 +164,7 @@ public class AG {
         boolean x = true;
         ArrayList<Integer> colors = new ArrayList<Integer>();
         for (int i = 0; i < test.getNodesNumber(); i++) {
-            rate =rate+ op.get(i).rate();
+            rate = rate + op.get(i).rate();
             for (int j = 0; j < colors.size(); j++) {
                 x = true;
                 if (op.get(i).getColor() == colors.get(j)) {
@@ -181,7 +181,6 @@ public class AG {
 
     public void crossing() {
 
-        
         newPopulation = new ArrayList<Subject>();
         int[] childOne = new int[getSchema().getNodesNumber()];
         int[] childTwo = new int[getSchema().getNodesNumber()];
@@ -205,10 +204,10 @@ public class AG {
             result = getRandom().nextDouble() * range;
             for (int j = 0; j < getPopulation().size(); j++) {
                 result -= getPopulation().get(j).getChance();
-                if (result >= 0.0) {
+                if (result <= 0.0) {
                     parentTwo = getPopulation().get(j);
                     if (getRandom().nextInt(100) < this.getChanceCrossing()) {
-                        point = getRandom().nextInt(getSchema().getNodesNumber() - 1);
+                        point = getRandom().nextInt(getSchema().getNodesNumber());
 
                         for (int k = 0; k < getSchema().getNodesNumber(); k++) {
                             if (k < point) {
@@ -220,17 +219,19 @@ public class AG {
                             }
                         }
                     } else {
-                        childOne = parentOne.getColors();
-                        childTwo = parentTwo.getColors();
+                        for (int k = 0; k < getSchema().getNodesNumber(); k++){
+                        childOne[k] = parentOne.getColors()[k];
+                        childTwo[k] = parentTwo.getColors()[k];
+                        }
                     }
-                    
+
                 }
                 newPopulation.add(new Subject(childOne));
                 newPopulation.add(new Subject(childTwo));
                 break;
             }
         }
-        population=newPopulation;
+        population = newPopulation;
     }
-    
+
 }

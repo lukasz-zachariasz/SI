@@ -28,7 +28,7 @@ public class Graph {
     Graph(Graph graph, int[] colors){
         nodes=new ArrayList<Node>();
         for(int i=0; i<graph.nodesNumber;i++){
-            nodes.add(new Node(graph.nodes.get(i)));
+            nodes.add(new Node(graph.nodes.get(i),colors[i]));
         }
         this.nodesNumber=graph.nodesNumber;
         this.edgesNumber=graph.edgesNumber;
