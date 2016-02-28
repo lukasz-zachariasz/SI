@@ -19,8 +19,7 @@ public class AG {
     private int chanceCrossing;
     private int chanceMutation;
     private Graph schema;
-    Random random;
-    //private ArrayList<int[]> population;
+    private Random random;
     private ArrayList<Subject> population;
     private ArrayList<Subject> newPopulation;
     private int[] ratings;
@@ -29,31 +28,143 @@ public class AG {
         this.populationNumber = pop;
         this.chanceCrossing = cross;
         this.chanceMutation = mut;
-        this.schema = schema;
+        this.schema = problem;
         //population = new ArrayList<int[]>();
         population = new ArrayList<Subject>();
 
         random = new Random();
     }
 
+    /**
+     * @return the populationNumber
+     */
+    public int getPopulationNumber() {
+        return populationNumber;
+    }
+
+    /**
+     * @param populationNumber the populationNumber to set
+     */
+    public void setPopulationNumber(int populationNumber) {
+        this.populationNumber = populationNumber;
+    }
+
+    /**
+     * @return the chanceCrossing
+     */
+    public int getChanceCrossing() {
+        return chanceCrossing;
+    }
+
+    /**
+     * @param chanceCrossing the chanceCrossing to set
+     */
+    public void setChanceCrossing(int chanceCrossing) {
+        this.chanceCrossing = chanceCrossing;
+    }
+
+    /**
+     * @return the chanceMutation
+     */
+    public int getChanceMutation() {
+        return chanceMutation;
+    }
+
+    /**
+     * @param chanceMutation the chanceMutation to set
+     */
+    public void setChanceMutation(int chanceMutation) {
+        this.chanceMutation = chanceMutation;
+    }
+
+    /**
+     * @return the schema
+     */
+    public Graph getSchema() {
+        return schema;
+    }
+
+    /**
+     * @param schema the schema to set
+     */
+    public void setSchema(Graph schema) {
+        this.schema = schema;
+    }
+
+    /**
+     * @return the random
+     */
+    public Random getRandom() {
+        return random;
+    }
+
+    /**
+     * @param random the random to set
+     */
+    public void setRandom(Random random) {
+        this.random = random;
+    }
+
+    /**
+     * @return the population
+     */
+    public ArrayList<Subject> getPopulation() {
+        return population;
+    }
+
+    /**
+     * @param population the population to set
+     */
+    public void setPopulation(ArrayList<Subject> population) {
+        this.population = population;
+    }
+
+    /**
+     * @return the newPopulation
+     */
+    public ArrayList<Subject> getNewPopulation() {
+        return newPopulation;
+    }
+
+    /**
+     * @param newPopulation the newPopulation to set
+     */
+    public void setNewPopulation(ArrayList<Subject> newPopulation) {
+        this.newPopulation = newPopulation;
+    }
+
+    /**
+     * @return the ratings
+     */
+    public int[] getRatings() {
+        return ratings;
+    }
+
+    /**
+     * @param ratings the ratings to set
+     */
+    public void setRatings(int[] ratings) {
+        this.ratings = ratings;
+    }
+
     public void populate() {
-        int temp[] = new int[schema.getNodesNumber()];
-        for (int i = 0; i < populationNumber; i++) {
-            for (int j = 0; j < schema.getNodesNumber(); j++) {
-                temp[j] = random.nextInt(schema.getNodesNumber() - 1) + 1;
+        int temp[] = new int[getSchema().getNodesNumber()];
+        for (int i = 0; i < getPopulationNumber(); i++) {
+            for (int j = 0; j < getSchema().getNodesNumber(); j++) {
+                temp[j] = getRandom().nextInt(getSchema().getNodesNumber());
             }
-            population.add(new Subject(temp));
+            getPopulation().add(new Subject(temp));
         }
     }
 
-    public void evaluate(Subject one) {
-        Graph test = new Graph(schema, one.getColors());
+    public int evaluate(Subject one) {
+        Graph test = new Graph(getSchema(), one.getColors());
         ArrayList<Node> op = test.getNodes();
         int rate = 0;
         boolean x = true;
         ArrayList<Integer> colors = new ArrayList<Integer>();
         for (int i = 0; i < test.getNodesNumber(); i++) {
-            rate += op.get(i).rate();
+            rate =rate+ op.get(i).rate();
             for (int j = 0; j < colors.size(); j++) {
                 x = true;
                 if (op.get(i).getColor() == colors.get(j)) {
@@ -65,39 +176,41 @@ public class AG {
             }
         }
         one.setRating(rate * colors.size());
+        return one.getRating();
     }
 
     public void crossing() {
 
-        ratings = new int[this.populationNumber];
+        
         newPopulation = new ArrayList<Subject>();
-        int[] childOne = new int[schema.getNodesNumber()];
-        int[] childTwo = new int[schema.getNodesNumber()];
+        int[] childOne = new int[getSchema().getNodesNumber()];
+        int[] childTwo = new int[getSchema().getNodesNumber()];
         Subject parentOne;
         Subject parentTwo;
         int ratingsSummary = 0;
         double result;
         int point;
-        for (int i = 0; i < this.populationNumber; i++) {
-            evaluate(population.get(i));
+        for (int i = 0; i < this.getPopulationNumber(); i++) {
+            evaluate(getPopulation().get(i));
         }
-        sort(population);
-        population.subList(population.size() / 2, population.size()); //population.size should be equal to population number
-        for (int i = 0; i < population.size(); i++) {
-            ratingsSummary += population.get(i).getRating();
+        sort(getPopulation());
+        getPopulation().subList(getPopulation().size() / 2, getPopulation().size()).clear(); //population.size should be equal to population number
+        for (int i = 0; i < getPopulation().size(); i++) {
+            evaluate(getPopulation().get(i));
+            ratingsSummary += getPopulation().get(i).getRating();
         }
         double range = 1.0 / ratingsSummary;
-        for (int i = 0; i < population.size(); i++) {
-            parentOne = population.get(i);
-            result = random.nextDouble() * range;
-            for (int j = 0; j < population.size(); j++) {
-                result -= population.get(j).getChance();
+        for (int i = 0; i < getPopulation().size(); i++) {
+            parentOne = getPopulation().get(i);
+            result = getRandom().nextDouble() * range;
+            for (int j = 0; j < getPopulation().size(); j++) {
+                result -= getPopulation().get(j).getChance();
                 if (result >= 0.0) {
-                    parentTwo = population.get(j);
-                    if (random.nextInt(100) < this.chanceCrossing) {
-                        point = random.nextInt(schema.getNodesNumber() - 1);
+                    parentTwo = getPopulation().get(j);
+                    if (getRandom().nextInt(100) < this.getChanceCrossing()) {
+                        point = getRandom().nextInt(getSchema().getNodesNumber() - 1);
 
-                        for (int k = 0; k < schema.getNodesNumber(); k++) {
+                        for (int k = 0; k < getSchema().getNodesNumber(); k++) {
                             if (k < point) {
                                 childOne[k] = parentOne.getColors()[k];
                                 childTwo[k] = parentTwo.getColors()[k];
@@ -109,11 +222,15 @@ public class AG {
                     } else {
                         childOne = parentOne.getColors();
                         childTwo = parentTwo.getColors();
-                    } 
+                    }
+                    
                 }
-                
-                
+                newPopulation.add(new Subject(childOne));
+                newPopulation.add(new Subject(childTwo));
+                break;
             }
         }
+        population=newPopulation;
     }
+    
 }
