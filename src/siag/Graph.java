@@ -16,8 +16,8 @@ import java.util.Scanner;
  */
 public class Graph {
 
-    private ArrayList<Node> nodes;  //todo
-    private ArrayList<Edge> edges;  //todo
+    private ArrayList<Node> nodes;
+    private ArrayList<Edge> edges;
     private int nodesNumber;
     private int edgesNumber;
 

@@ -7,6 +7,7 @@ package siag;
 
 import java.util.ArrayList;
 import static java.util.Collections.sort;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -161,23 +162,17 @@ public class AG {
         Graph test = new Graph(getSchema(), one.getColors());
         ArrayList<Node> op = test.getNodes();
         int rate = 0;
-        boolean x = true;
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+        HashSet<Integer> colors = new HashSet<Integer>();
         for (int i = 0; i < test.getNodesNumber(); i++) {
-            rate = rate + op.get(i).rate();
-            for (int j = 0; j < colors.size(); j++) {
-                x = true;
-                if (op.get(i).getColor() == colors.get(j)) {
-                    x = false;
-                }
+            rate += op.get(i).rate();
+            colors.add(op.get(i).getColor());
             }
-            if (x) {
-                colors.add(op.get(i).getColor());
-            }
+            one.setRating((1 + rate) * colors.size());
+            one.setColorsNumber(colors.size());
+            return one.getRating();
         }
-        one.setRating((1+rate) * colors.size());
-        return one.getRating();
-    }
+
+    
 
     public void crossing() {
 
@@ -195,7 +190,7 @@ public class AG {
         sort(getPopulation());
         getPopulation().subList(getPopulation().size() / 2, getPopulation().size()).clear(); //population.size should be equal to population number
         for (int i = 0; i < getPopulation().size(); i++) {
-            evaluate(getPopulation().get(i));   
+            evaluate(getPopulation().get(i));
             ratingsSummary += getPopulation().get(i).getRating();
         }
         double range = 1.0 / ratingsSummary;
@@ -206,7 +201,9 @@ public class AG {
                 result -= getPopulation().get(j).getChance();
                 if (result <= 0.0) {
                     parentTwo = getPopulation().get(j);
-                    if(parentTwo==parentOne) getPopulation().get(j+1);
+                    if (parentTwo == parentOne) {
+                        getPopulation().get(j + 1);
+                    }
                     if (getRandom().nextInt(100) < this.getChanceCrossing()) {
                         point = getRandom().nextInt(getSchema().getNodesNumber());
 
@@ -220,9 +217,9 @@ public class AG {
                             }
                         }
                     } else {
-                        for (int k = 0; k < getSchema().getNodesNumber(); k++){
-                        childOne[k] = parentOne.getColors()[k];
-                        childTwo[k] = parentTwo.getColors()[k];
+                        for (int k = 0; k < getSchema().getNodesNumber(); k++) {
+                            childOne[k] = parentOne.getColors()[k];
+                            childTwo[k] = parentTwo.getColors()[k];
                         }
                     }
 
@@ -237,11 +234,12 @@ public class AG {
 
     public void mutate() {
         for (int i = 0; i < this.getPopulationNumber(); i++) {
+
             for (int j = 0; j < schema.getNodesNumber(); j++) {
-                if (random.nextInt(10000)<this.chanceMutation) {
-                            int[] temp = population.get(i).getColors();
-                            temp[j]=random.nextInt(schema.getNodesNumber());
-                            population.get(i).setColors(temp);
+                if (random.nextInt(10000) < this.chanceMutation) {
+                    int[] temp = population.get(i).getColors();
+                    temp[j] = random.nextInt(schema.getNodesNumber());
+                    population.get(i).setColors(temp);
                 }
             }
         }

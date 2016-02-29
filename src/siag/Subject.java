@@ -13,6 +13,7 @@ public class Subject implements Comparable {
     private int[] colors;
     private int rating;
     private double chance;
+    private int colorsNumber;
     
     Subject(int[] colors){
         //this.colors=colors;
@@ -45,6 +46,20 @@ public class Subject implements Comparable {
         if(rating<test.getRating()) return -1;
         else if(rating==test.getRating()) return 0;
         else return 1;
+    }
+
+    /**
+     * @return the colorsNumber
+     */
+    public int getColorsNumber() {
+        return colorsNumber;
+    }
+
+    /**
+     * @param colorsNumber the colorsNumber to set
+     */
+    public void setColorsNumber(int colorsNumber) {
+        this.colorsNumber = colorsNumber;
     }
     
 }
